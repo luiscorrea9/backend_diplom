@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [AuthModule, UsersModule,
@@ -19,7 +21,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           };
         },
       }
-    )
+    ),
+    CategoryModule,
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],

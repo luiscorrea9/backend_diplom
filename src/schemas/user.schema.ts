@@ -1,7 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Role } from '../roles/role.enum';
-import {  ShoppingCar } from "./shopping.car.shema";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -21,9 +20,6 @@ export class User {
   @Prop({trim: true,
   })
   password: string;
-
-  @Prop({ type: Types.ObjectId, ref: 'ShoppingCart' })
-  shopping_car: ShoppingCar;
 
   roles: Role[];
 }

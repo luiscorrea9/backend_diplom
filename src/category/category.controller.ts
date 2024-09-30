@@ -32,21 +32,10 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
-  @Get(':id')
-async findOne(@Param('id') id: string) {
-  try {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('El ID proporcionado no es válido.');
-    }
-    
-    const category = await this.categoryService.findOne(id);
-    if (!category) {
-      throw new NotFoundException('Category not found');
-    }
-    return category;
-  } catch (error) {
-    throw new BadRequestException(error.message);
-  }
+  @Get(':category')
+async findOne(@Param('category') category: string) {
+    return await this.categoryService.findOne(category);
+ 
 }
 
   @Put(':id')

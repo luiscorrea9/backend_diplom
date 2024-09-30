@@ -3,8 +3,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {Product} from 'src/schemas/product.schema'; 
-import {Category} from 'src/schemas/category.schema'; 
+import {Product} from 'src/product/schemas/product.schema'; 
+import {Category} from 'src/category/schemas/category.schema'; 
 
 @Injectable()
 export class ProductService {
@@ -25,8 +25,8 @@ export class ProductService {
     return this.productModel.find();
   }
 
-  async findOne(id: string) {
-    return this.productModel.findById(id);
+  async findOne(name: string) {
+    return this.productModel.findOne({name});
   }
 
   update(id: string, Product: UpdateProductDto) {

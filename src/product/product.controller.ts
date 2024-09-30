@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ConflictException, BadRequestException, NotFoundException, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ConflictException, BadRequestException, NotFoundException, Put, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -14,26 +14,19 @@ export class ProductController {
   }
 
   @Get()
+  async findOne(@Query('product') product: string) {
+    const valor = await this.productService.findOne(product);
+    console.log(valor)
+    return valor;
+   
+  }
+ 
+  @Get()
   findAll() {
     return this.productService.findAll();
   }
 
-  @Get(':id')
-async findOne(@Param('id') id: string) {
-  try {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException('El ID proporcionado no es válido.');
-    }
-    
-    const product = await this.productService.findOne(id);
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
-    return product;
-  } catch (error) {
-    throw new BadRequestException(error.message);
-  }
-}
+  
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateProduct: UpdateProductDto) {

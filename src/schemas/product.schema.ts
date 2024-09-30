@@ -1,22 +1,22 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Category } from "./category.schema";
+
 
 export type ProductDocument = HydratedDocument<Product>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, versionKey: false })
 export class Product {
-  @Prop({trim: true, required: true})
+  @Prop()
   name: string;
 
-  @Prop({trim: true, required: true})
+  @Prop()
   price: number;
 
-  @Prop({trim: true, required: true})
+  @Prop()
   description: string;
 
-  @Prop({trim: true, required: true})
-  category : Category
+  @Prop()
+  category : string
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

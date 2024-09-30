@@ -10,20 +10,7 @@ export class ProductController {
 
   @Post()
   async create(@Body() createProduct: CreateProductDto) {
-    try {
       return await this.productService.create(createProduct);
-    } catch (error) {
-
-      if (error.code === 11000) {
-
-        throw new ConflictException('Product already exists')
-        
-      }
-
-      throw error;
-      
-    }
-    
   }
 
   @Get()

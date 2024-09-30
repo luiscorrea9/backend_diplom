@@ -4,12 +4,12 @@ import {Product } from "./product.schema";
 
 export type ShoppingCarDocument = HydratedDocument<ShoppingCar>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, versionKey: false })
 export class ShoppingCar {
-  @Prop({trim: true})
+  @Prop()
   total_price: number;
 
-  @Prop({trim: true})
+  @Prop()
   quantity_items: number;
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Product' }] })

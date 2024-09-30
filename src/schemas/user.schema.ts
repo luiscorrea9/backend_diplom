@@ -5,7 +5,7 @@ import {  ShoppingCar } from "./shopping.car.shema";
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, versionKey: false })
 export class User {
   @Prop({trim: true,
      unique: true

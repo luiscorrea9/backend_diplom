@@ -13,18 +13,22 @@ export class ProductController {
       return await this.productService.create(createProduct);
   }
 
-  @Get()
-  async findOne(@Query('product') product: string) {
+  @Get(':product')
+  async findOne(@Param('product') product: string) {
     const valor = await this.productService.findOne(product);
     console.log(valor)
     return valor;
    
   }
- 
+
   @Get()
   findAll() {
     return this.productService.findAll();
   }
+
+  
+ 
+  
 
   
 

@@ -10,9 +10,9 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  async create(@Body() createCategoryDto: CreateCategoryDto) {
+  async create(@Body() createCategory: CreateCategoryDto)  {
     try {
-      return await this.categoryService.create(createCategoryDto);
+      return await this.categoryService.create(createCategory);
     } catch (error) {
 
       if (error.code === 11000) {

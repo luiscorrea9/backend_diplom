@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -6,13 +5,16 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Request,
-  UseGuards
 } from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-import { LoginDto } from "./dto/login.dto";
-import { SignUpDto } from "./dto/signup.dto";
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
+import { Role } from './role.enum';
+
+import { Public } from './decorators/public.decorator';
+import { Roles } from './decorators/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -20,17 +22,21 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: LoginDto) {
+  @Public()
+  signIn(@Body() signInDto: LoginDto, @Req() req) {
+    console.log(req.user);
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    console.log(req.user);
+    return 'Hola';
   }
 
   @HttpCode(HttpStatus.OK)
+  @Public()
   @Post('signup')
   signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto.email, signUpDto.password);

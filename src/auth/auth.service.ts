@@ -5,7 +5,7 @@ import { User } from '../schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from 'src/users/types/user.interface';
-import { Role } from 'src/roles/role.enum';
+import { Role } from 'src/auth/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,11 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload = { sub: user.id, email: user.email };
+    const payload = {
+      sub: { id: user._id },
+      email: user.email,
+      roles: user.roles,
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
@@ -34,7 +38,7 @@ export class AuthService {
     const user: IUser = {
       email,
       password: pass,
-      role: [Role.Admin],
+      roles: [Role.User],
     };
 
     const newUser = await this.userModel.create(user);

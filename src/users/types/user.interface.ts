@@ -1,11 +1,9 @@
+import { Types } from 'mongoose';
+import { Role } from 'src/auth/role.enum';
 
-import { Role } from "src/roles/role.enum";
-
-export interface IUser{
-
-    email: string
-
-    password: string
-
-    role: Role[]
+export interface IUser {
+  _id?: Types.ObjectId;
+  email: string;
+  password: string;
+  roles: Role[];
 }

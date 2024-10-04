@@ -15,22 +15,32 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+  async signIn(email: string, pass: string): Promise<{ access_token: string, user: IUser }> {
     const user = await this.usersService.findOneByEmailAndPassword(email, pass);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
+    
     const payload = {
       sub: { id: user._id },
       email: user.email,
       roles: user.roles,
     };
+
+    const newUser: IUser = {
+      email: user.email,
+      roles: [Role.User],
+      orders: []
+    }
+
+    
+    
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload), user: newUser
     };
   }
 
-  async signUp(email: string, pass: string): Promise<{ access_token: string }> {
+  async signUp(email: string, pass: string): Promise<{ access_token: string, user: IUser}> {
     const findUser = await this.userModel.findOne({ email }).exec();
 
     if (findUser) throw new UnauthorizedException('User already exist!');
@@ -44,11 +54,21 @@ export class AuthService {
     };
 
     const newUser = await this.userModel.create(user);
-    console.log(newUser);
+
+    
+    const newUserSignUp: IUser = {
+      email: user.email,
+      roles: [Role.User],
+      orders: []
+    }
+
+
 
     const payload = { sub: newUser.id, email: newUser.email };
+    delete user.password
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload), user: newUserSignUp
+
     };
   }
 }

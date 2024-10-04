@@ -9,14 +9,13 @@ import { Role } from 'src/roles/role.enum';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>,
-  private usersService: UsersService,
-  private jwtService: JwtService) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-  async signIn(
-    email: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
+  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.usersService.findOneByEmailAndPassword(email, pass);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -27,23 +26,20 @@ export class AuthService {
     };
   }
 
-  async signUp(
-    email: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
-
-    const findUser = await this.userModel.findOne({email}).exec();
+  async signUp(email: string, pass: string): Promise<{ access_token: string }> {
+    const findUser = await this.userModel.findOne({ email }).exec();
 
     if (findUser) throw new UnauthorizedException('User already exist!');
 
-    const user:IUser={
+    const user: IUser = {
       email,
-      password:pass,
-      role:[Role.User]
-    }
+      password: pass,
+      role: [Role.Admin],
+    };
 
-    const newUser = await this.userModel.create({user});
-    
+    const newUser = await this.userModel.create(user);
+    console.log(newUser);
+
     const payload = { sub: newUser.id, email: newUser.email };
     return {
       access_token: await this.jwtService.signAsync(payload),

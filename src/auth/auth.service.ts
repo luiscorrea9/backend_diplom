@@ -29,7 +29,7 @@ export class AuthService {
 
     const newUser: IUser = {
       email: user.email,
-      roles: [Role.User],
+      roles: user.roles,
       orders: []
     }
 

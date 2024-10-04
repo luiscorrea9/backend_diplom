@@ -28,6 +28,12 @@ export class ProductService {
   async findAll() {
     return this.productModel.find();
   }
+  async findAllOrders() {
+    const users = await this.userModel.find({}, { orders: 1 });
+    const allOrders = users.flatMap(user => user.orders);
+    return { orders: allOrders };
+  }
+  
 
   async findOne(name: string) {
     return this.productModel.findOne({name});

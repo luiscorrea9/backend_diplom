@@ -27,6 +27,12 @@ export class ProductController {
     return await this.productService.create(createProduct);
   }
 
+  @Get('orders')
+  @Public()
+  findAllOrders() {
+    return this.productService.findAllOrders();
+  }
+
   @Get(':product')
   @Public()
   async findOne(@Param('product') product: string) {

@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from 'src/users/types/user.interface';
@@ -36,9 +36,11 @@ export class AuthService {
     if (findUser) throw new UnauthorizedException('User already exist!');
 
     const user: IUser = {
+      
       email,
       password: pass,
       roles: [Role.User],
+      orders: []
     };
 
     const newUser = await this.userModel.create(user);

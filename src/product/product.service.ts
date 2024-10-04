@@ -5,11 +5,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {Product} from 'src/product/schemas/product.schema'; 
 import {Category} from 'src/category/schemas/category.schema'; 
+import { UpdateOrderDto } from 'src/users/dto/updare-order.dto';
+import { User } from '../users/schemas/user.schema';
 
 @Injectable()
 export class ProductService {
   constructor(@InjectModel(Product.name) private productModel: Model<Product>,
-  @InjectModel(Category.name) private categoryModel: Model<Category>) {}
+  @InjectModel(Category.name) private categoryModel: Model<Category>,
+  @InjectModel(User.name) private userModel: Model<User>
+) {}
 
   async create(createProduct: CreateProductDto) {
     const findCategory = await this.categoryModel.findOne({name: createProduct.category});
@@ -35,5 +39,9 @@ export class ProductService {
 
   remove(id: string) {
     return this.productModel.findByIdAndDelete(id);
+  }
+
+  createOrder(Product: UpdateOrderDto, id: string){
+    return this.userModel.findByIdAndUpdate(id, {$push: {orders: Product}, new: true})
   }
 }

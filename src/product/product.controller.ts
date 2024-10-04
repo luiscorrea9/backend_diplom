@@ -3,20 +3,18 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
-  ConflictException,
   BadRequestException,
   NotFoundException,
   Put,
-  Query,
   Req,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Types } from 'mongoose';
+import { Public } from 'src/auth/decorators/public.decorator';
 import { UpdateOrderDto } from 'src/users/dto/updare-order.dto';
 
 @Controller('product')
@@ -24,11 +22,13 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @Public()
   async create(@Body() createProduct: CreateProductDto) {
     return await this.productService.create(createProduct);
   }
 
   @Get(':product')
+  @Public()
   async findOne(@Param('product') product: string) {
     const valor = await this.productService.findOne(product);
     console.log(valor);
@@ -36,11 +36,13 @@ export class ProductController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.productService.findAll();
   }
 
   @Put(':id')
+  @Public()
   async update(
     @Param('id') id: string,
     @Body() updateProduct: UpdateProductDto,
@@ -61,12 +63,12 @@ export class ProductController {
   }
 
   @Put()
-  updateOrder(@Body() updateOrder: UpdateOrderDto, @Req() req: any){
-    return this.productService.createOrder(updateOrder, req.user.sub.id)
+  updateOrder(@Body() updateOrder: UpdateOrderDto, @Req() req: any) {
+    return this.productService.createOrder(updateOrder, req.user.sub.id);
   }
 
-
   @Delete(':id')
+  @Public()
   async remove(@Param('id') id: string) {
     try {
       if (!Types.ObjectId.isValid(id)) {

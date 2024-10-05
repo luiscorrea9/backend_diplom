@@ -16,17 +16,21 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Types } from 'mongoose';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { UpdateOrderDto } from 'src/users/dto/updare-order.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @Roles(Role.Admin)
   @Post()
   @Public()
   async create(@Body() createProduct: CreateProductDto) {
     return await this.productService.create(createProduct);
   }
 
+  @Roles(Role.Admin)
   @Get('orders')
   @Public()
   findAllOrders() {
@@ -47,6 +51,7 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @Roles(Role.Admin)
   @Put(':id')
   @Public()
   async update(
@@ -68,11 +73,13 @@ export class ProductController {
     }
   }
 
+  @Roles(Role.Admin)
   @Put()
   updateOrder(@Body() updateOrder: UpdateOrderDto, @Req() req: any) {
     return this.productService.createOrder(updateOrder, req.user.sub.id);
   }
 
+  @Roles(Role.Admin)
   @Delete(':id')
   @Public()
   async remove(@Param('id') id: string) {

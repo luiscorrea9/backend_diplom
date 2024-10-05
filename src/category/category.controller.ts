@@ -25,7 +25,6 @@ export class CategoryController {
 
   @Roles(Role.Admin)
   @Post()
-  @Public()
   async create(@Body() createCategory: CreateCategoryDto) {
     try {
       return await this.categoryService.create(createCategory);
@@ -52,7 +51,6 @@ export class CategoryController {
 
   @Roles(Role.Admin)
   @Put(':id')
-  @Public()
   async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -74,7 +72,6 @@ export class CategoryController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  @Public()
   async remove(@Param('id') id: string) {
     try {
       if (!Types.ObjectId.isValid(id)) {

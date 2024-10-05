@@ -24,14 +24,13 @@ export class AuthController {
   @Post('login')
   @Public()
   signIn(@Body() signInDto: LoginDto, @Req() req) {
-    console.log(req.user);
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
   @Roles(Role.Admin)
   @Get('profile')
   getProfile(@Request() req) {
-    console.log(req.user);
+
     return 'Hola';
   }
 

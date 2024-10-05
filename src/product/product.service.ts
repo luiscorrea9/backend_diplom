@@ -17,7 +17,7 @@ export class ProductService {
 
   async create(createProduct: CreateProductDto) {
     const findCategory = await this.categoryModel.findOne({name: createProduct.category});
-    console.log(findCategory)
+  
     if(!findCategory) throw new NotFoundException('Category not found')
     const newProduct = new this.productModel(createProduct);
     return newProduct.save();

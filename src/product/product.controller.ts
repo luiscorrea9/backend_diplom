@@ -25,14 +25,12 @@ export class ProductController {
 
   @Roles(Role.Admin)
   @Post()
-  @Public()
   async create(@Body() createProduct: CreateProductDto) {
     return await this.productService.create(createProduct);
   }
 
   @Roles(Role.Admin)
   @Get('orders')
-  @Public()
   findAllOrders() {
     return this.productService.findAllOrders();
   }
@@ -41,7 +39,6 @@ export class ProductController {
   @Public()
   async findOne(@Param('product') product: string) {
     const valor = await this.productService.findOne(product);
-    console.log(valor);
     return valor;
   }
 
@@ -53,7 +50,6 @@ export class ProductController {
 
   @Roles(Role.Admin)
   @Put(':id')
-  @Public()
   async update(
     @Param('id') id: string,
     @Body() updateProduct: UpdateProductDto,

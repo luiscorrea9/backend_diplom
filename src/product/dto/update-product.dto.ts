@@ -10,4 +10,6 @@ export class UpdateProductDto{
   
     category?: string
 
+    image?: string
+
 }

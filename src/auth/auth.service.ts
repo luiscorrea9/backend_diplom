@@ -30,7 +30,7 @@ export class AuthService {
     const newUser: IUser = {
       email: user.email,
       roles: user.roles,
-      orders: []
+      orders: user.orders
     }
 
     

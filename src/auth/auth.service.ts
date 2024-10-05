@@ -15,12 +15,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<{ access_token: string, user: IUser }> {
+  async signIn(
+    email: string,
+    pass: string,
+  ): Promise<{ access_token: string; user: IUser }> {
     const user = await this.usersService.findOneByEmailAndPassword(email, pass);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    
+
     const payload = {
       sub: { id: user._id },
       email: user.email,
@@ -30,45 +33,46 @@ export class AuthService {
     const newUser: IUser = {
       email: user.email,
       roles: user.roles,
-      orders: user.orders
-    }
+      orders: [],
+    };
 
-    
-    
     return {
-      access_token: await this.jwtService.signAsync(payload), user: newUser
+      access_token: await this.jwtService.signAsync(payload),
+      user: newUser,
     };
   }
 
-  async signUp(email: string, pass: string): Promise<{ access_token: string, user: IUser}> {
+  async signUp(
+    email: string,
+    pass: string,
+  ): Promise<{ access_token: string; user: IUser }> {
     const findUser = await this.userModel.findOne({ email }).exec();
 
     if (findUser) throw new UnauthorizedException('User already exist!');
 
     const user: IUser = {
-      
       email,
       password: pass,
       roles: [Role.User],
-      orders: []
+      orders: [],
     };
 
     const newUser = await this.userModel.create(user);
 
-    
     const newUserSignUp: IUser = {
       email: user.email,
       roles: [Role.User],
-      orders: []
-    }
+      orders: [],
+    };
 
-
-
-    const payload = { sub: newUser.id, email: newUser.email };
-    delete user.password
+    const payload = {
+      sub: { id: newUser._id },
+      email: newUser.email,
+      roles: newUser.roles,
+    };
     return {
-      access_token: await this.jwtService.signAsync(payload), user: newUserSignUp
-
+      access_token: await this.jwtService.signAsync(payload),
+      user: newUserSignUp,
     };
   }
 }

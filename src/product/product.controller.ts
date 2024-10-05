@@ -69,9 +69,11 @@ export class ProductController {
     }
   }
 
-  @Roles(Role.Admin)
-  @Put()
+  
+  @Post('orders')
+  @Roles(Role.User)
   updateOrder(@Body() updateOrder: UpdateOrderDto, @Req() req: any) {
+    console.log(req.user)
     return this.productService.createOrder(updateOrder, req.user.sub.id);
   }
 
